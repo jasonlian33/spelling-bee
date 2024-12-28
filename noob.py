@@ -6,7 +6,7 @@ from pydub import AudioSegment
 
 
 noob_dict = {
-    "snake": AudioSegment.from_file("audio/snake.wav", format = "wav")
+    "snake": AudioSegment.from_file("audio/snake.m4a", format = "m4a")
 }
 
 def Noob():
