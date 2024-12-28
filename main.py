@@ -2,6 +2,8 @@ import pygame, sys
 from button import Button
 from noob import Noob 
 from game_manager import screen, get_font
+from pydub import AudioSegment 
+
 
 pygame.init()
 

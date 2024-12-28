@@ -1,6 +1,13 @@
 import pygame, sys
 from button import Button
 from game_manager import screen, get_font
+from pydub import AudioSegment
+
+
+
+noob_dict = {
+    "snake": AudioSegment.from_file("audio/snake.wav", format = "wav")
+}
 
 def Noob():
     while True:
