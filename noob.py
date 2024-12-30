@@ -1,10 +1,7 @@
 import pygame, sys
 from button import Button
 from game_manager import screen, get_font
-from pydub import AudioSegment
-from pydub.playback import play
 import random
-
 
 # dictionary that holds each word's audio
 noob_dict = {
@@ -20,15 +17,18 @@ noob_dict = {
     "whisper": [pygame.mixer.Sound("audio/whisper.wav")]
 }
 
-# gets a random word from the noob dictionary
-random_word = random.choice(list(noob_dict.keys())) 
-word_audio = noob_dict[random_word][0] # gets the audio from the selected word 
+
 
 def Noob():
+    # gets a random word from the noob dictionary
+    random_word = random.choice(list(noob_dict.keys())) 
+    word_audio = noob_dict[random_word][0] # gets the audio from the selected word 
+
+    player_score = 0 # keeps track of the players score
+
     base_font = pygame.font.Font(None, 50)
     base1_font = pygame.font.Font(None, 30)
     user_text = ''
-    player_score = 0 # keeps track of the players score
 
     # dimension and color of the text box 
     input_rect = pygame.Rect(250, 350, 350, 50) # (x,y, x-dimension, y-dimension)
@@ -39,9 +39,9 @@ def Noob():
     # turns to true when player clicks inside the text box
     active = False
 
-    while True:
+    while player_score != 3:
         noob_mouse_pos = pygame.mouse.get_pos()
-
+        
         # fills background to desire color
         screen.fill("#cfb825") 
         noob_text = get_font(35).render("Difficulty: Noob", True, "White")
@@ -71,7 +71,6 @@ def Noob():
             # when player clicks on mouse button
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_audio.checkForInput(noob_mouse_pos):
-                        print("should be playing")
                         word_audio.play()
                 if noob_back.checkForInput(noob_mouse_pos):
                     return
@@ -90,6 +89,12 @@ def Noob():
                         # code that checks whether the code is right or not
                         if user_text.strip().lower() == random_word:
                             print("correct!")
+                            player_score += 1 # adds one to player score
+                            random_word = random.choice(list(noob_dict.keys())) # gets a new word from the dictionary
+                            word_audio = noob_dict[random_word][0] # gets the audio from the selected word 
+                            user_text = ''
+                        else:
+                            print("that is incorrect!")
                     else:
                         user_text += event.unicode
 
