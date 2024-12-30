@@ -14,11 +14,13 @@ noob_dict = {
 
 def Noob():
     base_font = pygame.font.Font(None, 50)
+    base1_font = pygame.font.Font(None, 30)
     user_text = ''
+    type_here = 'Click and Type: '
     player_score = 0 # keeps track of the players score
 
     # dimension and color of the text box 
-    input_rect = pygame.Rect(250,250, 350, 50)
+    input_rect = pygame.Rect(250,300, 350, 50) # (x,y, x-dimension, y-dimension)
     color_active = "White"
     color_passive = "Black"
     color = color_passive
@@ -42,15 +44,9 @@ def Noob():
         noob_back.changeColor(noob_mouse_pos)
         noob_back.update(screen)
 
-    
-        """"
-        while player_score != 3:
-            random_word = random.choice(list(noob_dict.keys())) # select a random word from the noob word list
-            #print(random_word)
-            break
-        """
-        random_word = random.choice(list(noob_dict.keys())) # select a random word from the noob word list
-        word_audio = noob_dict[random_word]
+        # gets a random word from the noob dictionary
+        random_word = random.choice(list(noob_dict.keys())) 
+        word_audio = noob_dict[random_word] # gets the audio from the selected word 
 
         for event in pygame.event.get():
            # when playes clicks out of the tab
@@ -91,5 +87,8 @@ def Noob():
         text_surface = base_font.render(user_text, True, "White")
         screen.blit(text_surface, (input_rect.x + 5, input_rect.y + 5))
         input_rect.w = max(225, text_surface.get_width() + 10)
+
+        text1_surface = base1_font.render(type_here, True, "White")
+        screen.blit(text1_surface, (input_rect.x -50,input_rect.y - 10))
 
         pygame.display.update()
