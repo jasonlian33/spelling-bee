@@ -55,6 +55,14 @@ def Noob():
         noob_back.changeColor(noob_mouse_pos)
         noob_back.update(screen)
 
+        # reset button that resets player score to 0
+        noob_reset = Button(image=None, pos=(375, 550), 
+                            text_input="RESET", font=get_font(20), base_color="White", hovering_color="Green")
+
+        noob_reset.changeColor(noob_mouse_pos)
+        noob_reset.update(screen)
+
+
         # button for playing word_audio
         play_audio = Button(image = pygame.image.load("assets/bee1.png"), pos = (500, 150),
                             text_input= 'hi', font= get_font(1), base_color= "White", hovering_color= "White", scale= 0.02)
@@ -74,6 +82,8 @@ def Noob():
                         word_audio.play()
                 if noob_back.checkForInput(noob_mouse_pos):
                     return
+                if noob_reset.checkForInput(noob_mouse_pos):
+                    player_score = 0
                 if input_rect.collidepoint(event.pos):
                     active = True
                 else: 
