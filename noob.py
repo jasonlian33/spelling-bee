@@ -6,28 +6,38 @@ from pydub.playback import play
 import random
 
 
-
+# dictionary that holds each word's audio
 noob_dict = {
-    "snake":  pygame.mixer.Sound("audio/snakew.wav")
+    "snake":  [pygame.mixer.Sound("audio/snake.wav")],
+    "climb": [pygame.mixer.Sound("audio/climb.wav")],
+    "credit": [pygame.mixer.Sound("audio/credit.wav")],
+    "crown": [pygame.mixer.Sound("audio/crown.wav")],
+    "float": [pygame.mixer.Sound("audio/float.wav")],
+    "ground": [pygame.mixer.Sound("audio/ground.wav")],
+    "ladder": [pygame.mixer.Sound("audio/ladder.wav")],
+    "music": [pygame.mixer.Sound("audio/music.wav")],
+    "second": [pygame.mixer.Sound("audio/second.wav")],
+    "whisper": [pygame.mixer.Sound("audio/whisper.wav")]
 }
 
-
+# gets a random word from the noob dictionary
+random_word = random.choice(list(noob_dict.keys())) 
+word_audio = noob_dict[random_word][0] # gets the audio from the selected word 
 
 def Noob():
     base_font = pygame.font.Font(None, 50)
     base1_font = pygame.font.Font(None, 30)
     user_text = ''
-    type_here = 'Click and Type: '
     player_score = 0 # keeps track of the players score
 
     # dimension and color of the text box 
-    input_rect = pygame.Rect(250,300, 350, 50) # (x,y, x-dimension, y-dimension)
+    input_rect = pygame.Rect(250, 350, 350, 50) # (x,y, x-dimension, y-dimension)
     color_active = "Green"
     color_passive = "Black"
     color = color_passive
 
+    # turns to true when player clicks inside the text box
     active = False
-
 
     while True:
         noob_mouse_pos = pygame.mouse.get_pos()
@@ -45,12 +55,8 @@ def Noob():
         noob_back.changeColor(noob_mouse_pos)
         noob_back.update(screen)
 
-        # gets a random word from the noob dictionary
-        random_word = random.choice(list(noob_dict.keys())) 
-        word_audio = noob_dict[random_word] # gets the audio from the selected word 
-
         # button for playing word_audio
-        play_audio = Button(image = pygame.image.load("assets/bee1.png"), pos = (200, 150),
+        play_audio = Button(image = pygame.image.load("assets/bee1.png"), pos = (500, 150),
                             text_input= 'hi', font= get_font(1), base_color= "White", hovering_color= "White", scale= 0.02)
 
         play_audio.update(screen)
@@ -100,7 +106,15 @@ def Noob():
         input_rect.w = max(225, text_surface.get_width() + 10)
 
         # Click and Type Message
+        type_here = 'Click and Type: '
         text1_surface = base1_font.render(type_here, True, "White")
         screen.blit(text1_surface, (input_rect.x - 175, input_rect.y + 15))
+
+        # Click on me for word message
+        play_word = 'Click on me to play the word!'
+        text2_surface = base1_font.render(play_word, True, "White")
+        screen.blit(text2_surface, (input_rect.x - 85, input_rect.y - 200 ))
+
+
 
         pygame.display.update()
