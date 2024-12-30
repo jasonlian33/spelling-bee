@@ -4,25 +4,25 @@ from game_manager import screen, get_font
 import random
 
 # dictionary that holds each word's audio
-noob_dict = {
-    "snake":  [pygame.mixer.Sound("audio/snake.wav")],
-    "climb": [pygame.mixer.Sound("audio/climb.wav")],
-    "credit": [pygame.mixer.Sound("audio/credit.wav")],
-    "crown": [pygame.mixer.Sound("audio/crown.wav")],
-    "float": [pygame.mixer.Sound("audio/float.wav")],
-    "ground": [pygame.mixer.Sound("audio/ground.wav")],
-    "ladder": [pygame.mixer.Sound("audio/ladder.wav")],
-    "music": [pygame.mixer.Sound("audio/music.wav")],
-    "second": [pygame.mixer.Sound("audio/second.wav")],
-    "whisper": [pygame.mixer.Sound("audio/whisper.wav")]
+original_noob_dict = {
+    "snake":  [pygame.mixer.Sound("audio/snake.wav"), "The ??? bit the boy."],
+    "climb": [pygame.mixer.Sound("audio/climb.wav"), "Monkey ??? trees."],
+    "credit": [pygame.mixer.Sound("audio/credit.wav"), "I used ??? to pay for my food."],
+    "crown": [pygame.mixer.Sound("audio/crown.wav"), "The king put on his ???."],
+    "float": [pygame.mixer.Sound("audio/float.wav"), "That serve had a lot of ??? to it."], 
+    "ground": [pygame.mixer.Sound("audio/ground.wav"), "The ??? was very hard."],
+    "ladder": [pygame.mixer.Sound("audio/ladder.wav"), "The ??? helped me reach the shelf."],
+    "music": [pygame.mixer.Sound("audio/music.wav"), "I listen to ??? everyday."],
+    "second": [pygame.mixer.Sound("audio/second.wav"), "I never come in ??? place"],
+    "whisper": [pygame.mixer.Sound("audio/whisper.wav"), "They told us to ??? in the library."]
 }
 
-
-
 def Noob():
+    copy_noob_dict = original_noob_dict.copy()
+
     # gets a random word from the noob dictionary
-    random_word = random.choice(list(noob_dict.keys())) 
-    word_audio = noob_dict[random_word][0] # gets the audio from the selected word 
+    random_word = random.choice(list(copy_noob_dict.keys())) 
+    word_audio = copy_noob_dict[random_word][0] # gets the audio from the selected word 
 
     player_score = 0 # keeps track of the players score
 
@@ -39,7 +39,7 @@ def Noob():
     # turns to true when player clicks inside the text box
     active = False
 
-    while player_score != 3:
+    while player_score < len(original_noob_dict):
         noob_mouse_pos = pygame.mouse.get_pos()
         
         # fills background to desire color
@@ -64,7 +64,7 @@ def Noob():
 
         # Keep track of player's score
         score_keeper = Button(image=None, pos=(650, 550), 
-                            text_input= "SCORE: " + str(player_score) + "/3", font=get_font(20), base_color="White", hovering_color="Green")
+                            text_input= "SCORE: " + str(player_score) + "/" + str(len(original_noob_dict)), font=get_font(20), base_color="White", hovering_color="Green")
 
         score_keeper.changeColor(noob_mouse_pos)
         score_keeper.update(screen)
@@ -92,6 +92,7 @@ def Noob():
                     return
                 if noob_reset.checkForInput(noob_mouse_pos):
                     player_score = 0
+                    copy_noob_dict = original_noob_dict.copy()
                 if input_rect.collidepoint(event.pos):
                     active = True
                 else: 
@@ -104,13 +105,17 @@ def Noob():
                     if event.key == pygame.K_BACKSPACE: # if player deletes a letter
                         user_text = user_text[:-1] # index to remove last letter
                     elif event.key == pygame.K_RETURN:
-                        # code that checks whether the code is right or not
                         if user_text.strip().lower() == random_word:
                             print("correct!")
                             player_score += 1 # adds one to player score
-                            random_word = random.choice(list(noob_dict.keys())) # gets a new word from the dictionary
-                            word_audio = noob_dict[random_word][0] # gets the audio from the selected word 
-                            user_text = ''
+                            del copy_noob_dict[random_word]
+                            if copy_noob_dict:
+                                random_word = random.choice(list(copy_noob_dict.keys())) # gets a new word from the dictionary
+                                word_audio = copy_noob_dict[random_word][0] # gets the audio from the selected word 
+                                user_text = ''
+                            else:
+                                print("Congratulations! You have completed the level.")
+                                return
                         else:
                             print("that is incorrect!")
                     else:
@@ -137,6 +142,12 @@ def Noob():
         play_word = 'Click on me to play the word!'
         text2_surface = base1_font.render(play_word, True, "White")
         screen.blit(text2_surface, (input_rect.x - 85, input_rect.y - 200 ))
+
+        # Sentence for each word
+        sentence = copy_noob_dict[random_word][1]
+        text3_surface = base1_font.render(sentence, True, "White")
+        screen.blit(text3_surface, (input_rect.x - 85, input_rect.y - 100))
+
 
 
 
