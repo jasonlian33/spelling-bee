@@ -62,6 +62,14 @@ def Noob():
         noob_reset.changeColor(noob_mouse_pos)
         noob_reset.update(screen)
 
+        # Keep track of player's score
+        score_keeper = Button(image=None, pos=(650, 550), 
+                            text_input= "SCORE: " + str(player_score) + "/3", font=get_font(20), base_color="White", hovering_color="Green")
+
+        score_keeper.changeColor(noob_mouse_pos)
+        score_keeper.update(screen)
+
+
 
         # button for playing word_audio
         play_audio = Button(image = pygame.image.load("assets/bee1.png"), pos = (500, 150),
