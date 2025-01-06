@@ -18,7 +18,7 @@ original_noob_dict = {
 }
 
 def Noob():
-    copy_noob_dict = original_noob_dict.copy()
+    copy_noob_dict = original_noob_dict.copy() 
 
     # gets a random word from the noob dictionary
     random_word = random.choice(list(copy_noob_dict.keys())) 
@@ -39,7 +39,16 @@ def Noob():
     # turns to true when player clicks inside the text box
     active = False
 
+    # "Try Again" Message when player gets the word incorrect
+    display_try_again = False
+    try_again_start_time = 0
+    try_again_duration = 1500 # 1.5 seconds duration
+    try_again_font = pygame.font.Font("assets/font.ttf", 40)  # Font size 60 for "Try Again" text
+
+
     while player_score < len(original_noob_dict):
+        current_time = pygame.time.get_ticks()
+
         noob_mouse_pos = pygame.mouse.get_pos()
         
         # fills background to desire color
@@ -109,17 +118,31 @@ def Noob():
                             print("correct!")
                             player_score += 1 # adds one to player score
                             del copy_noob_dict[random_word]
-                            if copy_noob_dict:
+                            if copy_noob_dict: # if there are more words left in the dictionary
                                 random_word = random.choice(list(copy_noob_dict.keys())) # gets a new word from the dictionary
                                 word_audio = copy_noob_dict[random_word][0] # gets the audio from the selected word 
                                 user_text = ''
                             else:
+                                # otherwise player has completed every word
                                 print("Congratulations! You have completed the level.")
                                 return
                         else:
                             print("that is incorrect!")
+                            display_try_again = True
+                            try_again_start_time = pygame.time.get_ticks()
+                            user_text = ''
+                            
                     else:
                         user_text += event.unicode
+
+        if display_try_again:
+            current_time = pygame.time.get_ticks()
+            if current_time - try_again_start_time < try_again_duration:
+                try_again_text = try_again_font.render("Try Again!", True, "Red")
+                screen.blit(try_again_text, (250, 280))  # Adjust position as needed
+            else:
+                display_try_again = False  # Stop displaying after duration
+
 
 
         if active:
