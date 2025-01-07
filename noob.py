@@ -45,8 +45,17 @@ def Noob():
     try_again_duration = 1500 # 1.5 seconds duration
     try_again_font = pygame.font.Font("assets/font.ttf", 40)  # Font size 60 for "Try Again" text
 
+    # "Congrats" Message when player gets the all the words correct
+    display_congrats = False
+    congrats_start_time = 0
+    congrats_duration = 3000 # 3 seconds duration
+    congrats_font = pygame.font.Font("assets/font.ttf", 40)  # Font size 60 for "Try Again" text
 
-    while player_score < len(original_noob_dict):
+    # Tracks whether the user clicks on the give-up button
+    reveal_word = False
+
+
+    while True:
         current_time = pygame.time.get_ticks()
 
         noob_mouse_pos = pygame.mouse.get_pos()
@@ -78,6 +87,12 @@ def Noob():
         score_keeper.changeColor(noob_mouse_pos)
         score_keeper.update(screen)
 
+        # Give up button that reveals the word if player presses it
+        give_up = Button(image=None, pos=(375, 450), 
+                            text_input= "Give Up", font=get_font(20), base_color="White", hovering_color="Red")
+        
+        give_up.changeColor(noob_mouse_pos)
+        give_up.update(screen)
 
 
         # button for playing word_audio
@@ -102,6 +117,8 @@ def Noob():
                 if noob_reset.checkForInput(noob_mouse_pos):
                     player_score = 0
                     copy_noob_dict = original_noob_dict.copy()
+                if give_up.checkForInput(noob_mouse_pos):
+                    reveal_word = True
                 if input_rect.collidepoint(event.pos):
                     active = True
                 else: 
@@ -116,6 +133,7 @@ def Noob():
                     elif event.key == pygame.K_RETURN:
                         if user_text.strip().lower() == random_word:
                             print("correct!")
+                            reveal_word = False
                             player_score += 1 # adds one to player score
                             del copy_noob_dict[random_word]
                             if copy_noob_dict: # if there are more words left in the dictionary
@@ -142,8 +160,10 @@ def Noob():
                 screen.blit(try_again_text, (250, 280))  # Adjust position as needed
             else:
                 display_try_again = False  # Stop displaying after duration
-
-
+            
+        if reveal_word:
+            word = base_font.render(random_word, True, "Green")
+            screen.blit(word, (input_rect.x + 235, input_rect.y + 5))
 
         if active:
             color = color_active
@@ -170,8 +190,5 @@ def Noob():
         sentence = copy_noob_dict[random_word][1]
         text3_surface = base1_font.render(sentence, True, "White")
         screen.blit(text3_surface, (input_rect.x - 85, input_rect.y - 100))
-
-
-
 
         pygame.display.update()
